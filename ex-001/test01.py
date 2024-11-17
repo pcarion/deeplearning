@@ -1,10 +1,8 @@
-import os
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage, SystemMessage
-import json
 from langchain_core.output_parsers import PydanticOutputParser
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 from langchain_core.prompts import PromptTemplate
+import json
 
 
 # define the OpenAI LLM model name
