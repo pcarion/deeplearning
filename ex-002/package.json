@@ -1,0 +1,25 @@
+{
+  "name": "ex-002",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "start:test01": "node build/test01.js",
+    "start:test02": "node build/test02.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.9.1",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@langchain/anthropic": "^0.3.8",
+    "@langchain/core": "^0.3.18",
+    "langchain": "^0.3.6"
+  }
+}
