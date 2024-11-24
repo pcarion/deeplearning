@@ -16,7 +16,7 @@ REDIS_URL = "redis://localhost:6379"
 
 
 # we load the markdown file
-markdown_path = "./us-constitution.md"
+markdown_path = "./lex-fridman-451.md"
 loader = UnstructuredMarkdownLoader(markdown_path)
 documents = loader.load()
 
@@ -34,7 +34,6 @@ all_splits = text_splitter.split_documents(documents)
 
 print("number of splits: ", len(all_splits))
 
-
 config = RedisConfig(
     index_name="newsgroups",
     redis_url=REDIS_URL,
@@ -43,12 +42,16 @@ config = RedisConfig(
     ],
 )
 
-vectorstore = RedisVectorStore.from_documents(documents=all_splits, embedding=OpenAIEmbeddings())
+vectorstore = RedisVectorStore.from_documents(
+    documents=all_splits, 
+    embedding=OpenAIEmbeddings())
 
 
 print("number of vectors: ", vectorstore)
 
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 6})
+retriever = vectorstore.as_retriever(
+    search_type="similarity", 
+    search_kwargs={"k": 6})
 
 # retrieved_docs = retriever.invoke("Can a president be elected for a third term if the last term was was more than 4 years ago?")
 
@@ -81,5 +84,21 @@ rag_chain = (
     | StrOutputParser()
 )
 
-for chunk in rag_chain.stream("Can a president be elected for a third term if the last term was was more than 4 years ago?"):
-    print(chunk, end="", flush=True)
+# Replace the single question with a REPL loop
+while True:
+    try:
+        question = input("\n\nEnter your question (or 'quit' to exit): ")
+        if question.lower() in ['quit', 'exit', 'q']:
+            break
+            
+        print("\nAnswer:", flush=True)
+        for chunk in rag_chain.stream(question):
+            print(chunk, end="", flush=True)
+            
+    except KeyboardInterrupt:
+        print("\nExiting...")
+        break
+    except Exception as e:
+        print(f"\nError occurred: {str(e)}")
+
+
